@@ -19,7 +19,7 @@ public class Recv2 {
 
 		// 获取到连接以及mq通道
 		Connection connection = ConnectionUtil.getConnection();
-		Channel channel = connection.createChannel();
+		final Channel channel = connection.createChannel();
 
 		// 声明队列
 		channel.queueDeclare(QUEUE_NAME, true, false, false, null);

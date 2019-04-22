@@ -52,14 +52,12 @@ public class TestJavaDelayQueue {
 			this.excuteTime = TimeUnit.NANOSECONDS.convert(delayTime, TimeUnit.MILLISECONDS) + System.nanoTime();
 		}
 
-		@Override
 		public int compareTo(Delayed o) {
 			DelayMessage msg = (DelayMessage) o;  
 	        return Integer.valueOf(this.id) > Integer.valueOf(msg.id) ? 1  
 	                : (Integer.valueOf(this.id) < Integer.valueOf(msg.id) ? -1 : 0);  
 		}
 
-		@Override
 		public long getDelay(TimeUnit unit) {
 			return unit.convert(this.excuteTime - System.nanoTime(), TimeUnit.NANOSECONDS); 
 		}
@@ -74,8 +72,7 @@ public class TestJavaDelayQueue {
 	        this.queue = queue;  
 	    }  
 	  
-	    @Override  
-	    public void run() {  
+	    public void run() {
 	        while (true) {  
 	            try {  
 	            	DelayMessage take = queue.take();  

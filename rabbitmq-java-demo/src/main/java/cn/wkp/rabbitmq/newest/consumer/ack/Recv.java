@@ -20,7 +20,7 @@ public class Recv {
 
 		// 获取到连接以及mq通道
 		Connection connection = ConnectionUtil.getConnection();
-		Channel channel = connection.createChannel();
+		final Channel channel = connection.createChannel();
 
 		// 声明交换机-持久化，非自动删除
         channel.exchangeDeclare(EXCHANGE_NAME, "fanout", true,false,null);
