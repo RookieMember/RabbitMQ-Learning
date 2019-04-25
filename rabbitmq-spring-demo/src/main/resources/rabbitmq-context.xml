@@ -1,0 +1,79 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/rabbit
+	http://www.springframework.org/schema/rabbit/spring-rabbit-1.7.xsd
+	http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
+
+    <!-- 定义RabbitMQ的连接工厂 publisher-confirms="true"表示通过该连接工厂创建的连接支持publisher confirm-->
+    <rabbit:connection-factory id="connectionFactory" host="127.0.0.1" port="5672" username="wkp" password="123456"
+                               virtual-host="/myvhost" connection-timeout="5000" publisher-confirms="true"/>
+
+    <!-- MQ的管理，包括队列、交换器等 auto-startup="true"表示如果交换机，队列，绑定不存在时可以自动声明-->
+    <rabbit:admin auto-startup="true" connection-factory="connectionFactory"/>
+
+    <!--topic类型交换机，自动声明-->
+    <rabbit:topic-exchange name="spring_topic_exchange" auto-declare="true">
+        <rabbit:bindings>
+            <rabbit:binding pattern="test.*" queue="spring_myqueue"></rabbit:binding>
+        </rabbit:bindings>
+    </rabbit:topic-exchange>
+
+    <!--<rabbit:direct-exchange name="spring_direct_exchange">
+        <rabbit:bindings>
+            <rabbit:binding  queue="spring_myqueue" key="test_routingKey"></rabbit:binding>
+        </rabbit:bindings>
+    </rabbit:direct-exchange>
+
+    <rabbit:fanout-exchange name="spring_fanout_exchange">
+        <rabbit:bindings>
+            <rabbit:binding queue="spring_myqueue"></rabbit:binding>
+        </rabbit:bindings>
+    </rabbit:fanout-exchange>-->
+
+    <!-- 定义队列，自动声明 -->
+    <rabbit:queue name="spring_myqueue" auto-declare="true"/>
+
+    <!-- 定义Rabbit模板，指定连接工厂以及定义exchange -->
+    <rabbit:template id="rabbitTemplate" connection-factory="connectionFactory"
+                     confirm-callback="confirmCallBackHandler" mandatory="true"
+                     return-callback="returnCallBackHandler" retry-template="retryTemplate"/>
+
+    <!--重试模板:出现连接失败等错误时可以重试-->
+    <bean id="retryTemplate" class="org.springframework.retry.support.RetryTemplate">
+        <!--重试回退策略，指的是每次重试是立即重试还是等待一段时间后重试-->
+        <!--ExponentialBackOffPolicy 指数回退策略-->
+        <property name="backOffPolicy">
+            <bean class="org.springframework.retry.backoff.ExponentialBackOffPolicy">
+                <property name="initialInterval" value="200"/>
+                <property name="maxInterval" value="30000"/>
+            </bean>
+        </property>
+        <!--SimpleRetryPolicy 简单重试策略，固定次数-->
+        <property name="retryPolicy">
+            <bean class="org.springframework.retry.policy.SimpleRetryPolicy">
+                <property name="maxAttempts" value="5"/>
+            </bean>
+        </property>
+    </bean>
+
+    <!--消费队列监听 设置消费者手动ack，消息转换器(不设置默认为SimpleMessageConverter) -->
+    <rabbit:listener-container connection-factory="connectionFactory" acknowledge="manual"
+                               message-converter="jsonMessageConverter">
+        <rabbit:listener ref="consumerHandler" queue-names="spring_myqueue"/>
+    </rabbit:listener-container>
+    <!-- 消费队列监听-还可以设置预抓取消息数量，线程池等
+        <rabbit:listener-container connection-factory="connectionFactory" concurrency="1"
+                                   max-concurrency="2" prefetch="1" task-executor="taskExecutor">
+            <rabbit:listener ref="consumerHandler" queue-names="spring_myqueue"/>
+        </rabbit:listener-container>
+    -->
+    <!--消费者处理类-->
+    <bean id="consumerHandler" class="com.wkp.consumer.ConsumerHandler"/>
+    <!--confirm回调处理类-->
+    <bean id="confirmCallBackHandler" class="com.wkp.producer.ConfirmCallBackHandler"/>
+    <!--return回调处理类-->
+    <bean id="returnCallBackHandler" class="com.wkp.producer.ReturnCallBackHandler"/>
+    <!-- 消息转换器,消息对象json转换类 -->
+    <bean id="jsonMessageConverter" class="org.springframework.amqp.support.converter.Jackson2JsonMessageConverter"/>
+</beans>
