@@ -1,8 +1,7 @@
 # RabbitMQ-Learning
   这个主要是自己写RabbitMQ博客过程中的一些demo示例，之前一直没有整理上传到GitHub上面，最近整理上传了一下。博客地址：https://blog.csdn.net/u012988901 ，欢迎交流访问。
-  关于RabbitMQ的安装配置可以参考 https://blog.csdn.net/u012988901/article/details/87653771 ，我所使用的版本是RabbitMQ3.6.10，erlang为19.3。  
+  关于RabbitMQ的安装配置可以参考 https://blog.csdn.net/u012988901/article/details/87653771 。  
   
-  TODO RabbitMQ实现延迟队列，以及与Spring、SpringBoot的整合......
 ## 内容介绍  
 ### rabbitmq-java-demo
 rabbitmq-java-demo是RabbitMQ的java客户端amqp-client的demo程序示例，里面主要介绍了ampq-client的各种操作，下面对各个包做个简单介绍：  
@@ -17,3 +16,6 @@ https://blog.csdn.net/u012988901/article/details/88143105
 * cn.wkp.rabbitmq.newest.producer.confirm 介绍了生产者确认两种方式：事务和publisher confirm，对应博客：https://blog.csdn.net/u012988901/article/details/88778966
 * cn.wkp.rabbitmq.newest.producer.returnlistener 介绍了mandatory和return机制，对应博客：https://blog.csdn.net/u012988901/article/details/88931180
 * cn.wkp.rabbitmq.newest.ttl 和 cn.wkp.rabbitmq.newest.dlx 分别介绍了消息的有效期和死信交换机，对应博客：https://blog.csdn.net/u012988901/article/details/88958654
+* cn.wkp.rabbitmq.newest.delayqueue该包下是延迟队列的实现，子包ttldlx是通过ttl+dlx实现的延迟队列，子包plugin是通过插件实现的，TestJavaDelayQueue是Java的延迟队列，对应博客:https://blog.csdn.net/u012988901/article/details/89296451
+### rabbitmq-spring-demo
+该项目是RabbitMQ与Spring的整合代码示例，对应博客：https://blog.csdn.net/u012988901/article/details/89499634
