@@ -19,3 +19,5 @@ https://blog.csdn.net/u012988901/article/details/88143105
 * cn.wkp.rabbitmq.newest.delayqueue该包下是延迟队列的实现，子包ttldlx是通过ttl+dlx实现的延迟队列，子包plugin是通过插件实现的，TestJavaDelayQueue是Java的延迟队列，对应博客:https://blog.csdn.net/u012988901/article/details/89296451
 ### rabbitmq-spring-demo
 该项目是RabbitMQ与Spring的整合代码示例，对应博客：https://blog.csdn.net/u012988901/article/details/89499634
+### rabbitmq-springboot-demo
+该项目是RabbitMQ与SpringBoot的整合代码，其子项目common为公共工程，producer是消息生产者，consumer是消息消费者，对应博客：https://blog.csdn.net/u012988901/article/details/89673618
