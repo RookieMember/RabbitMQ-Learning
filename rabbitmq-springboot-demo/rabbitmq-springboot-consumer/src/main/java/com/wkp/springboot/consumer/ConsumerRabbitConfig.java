@@ -77,9 +77,9 @@ public class ConsumerRabbitConfig {
          * 如果是自动签收，默认会重回队列，然后一直循环重复消费。可以设置消息重新投递(设置最大投递次数，投递时间间隔，达到最大投递次数后是否重回队列等)
          */
         //模拟消费时抛出异常
-        int i=1/0;
+//        int i=1/0;
         //手工ACK
-//        channel.basicAck(deliveryTag, false);
+        channel.basicAck(deliveryTag, false);
     }
 
     @RabbitListener(queues = "direct_queue")
