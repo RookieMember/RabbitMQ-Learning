@@ -59,12 +59,13 @@
 
     <!--消费队列监听 设置消费者手动ack，消息转换器(不设置默认为SimpleMessageConverter) -->
     <rabbit:listener-container connection-factory="connectionFactory" acknowledge="manual"
-                               message-converter="jsonMessageConverter">
+                               message-converter="jsonMessageConverter" >
         <rabbit:listener ref="consumerHandler" queue-names="spring_myqueue"/>
     </rabbit:listener-container>
-    <!-- 消费队列监听-还可以设置预抓取消息数量，线程池等
+    <!-- 消费队列监听-还可以设置预抓取消息数量，线程池，消费listener抛出异常是否重回队列等
         <rabbit:listener-container connection-factory="connectionFactory" concurrency="1"
-                                   max-concurrency="2" prefetch="1" task-executor="taskExecutor">
+                                   max-concurrency="2" prefetch="1" task-executor="taskExecutor"
+                                   requeue-rejected="true">
             <rabbit:listener ref="consumerHandler" queue-names="spring_myqueue"/>
         </rabbit:listener-container>
     -->
